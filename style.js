@@ -1,0 +1,125 @@
+//variaveis da bolinha:
+let xBolinha = 300;
+let yBolinha = 200;
+let diametro = 15;
+let xVelocidadeBolinha = 6;
+let yVelocidadeBolinha = 6;
+let raio = diametro/2;
+
+//variáveis da raquete esquerda
+let xRaqueteEsquerda = 5;
+let yRaqueteEsquerda = 165;
+let larguraRaqueteEsquerda = 10;
+let alturaRaqueteEsquerda = 70;
+
+//variaveis da raquete do oponente:
+let xRaqueteOponente = 585;
+let yRaqueteOponente = 165;
+let larguraRaqueteOponente = 10;
+let alturaRaqueteOponente = 70;
+
+//variaveis do placar:
+let meuspontos = 0;
+let pontosoponente=0;
+
+
+function setup() {
+  createCanvas(600, 400);
+}
+
+function draw() {
+  background("black");
+  
+  circle(xBolinha,yBolinha,diametro);
+  xBolinha = xBolinha + xVelocidadeBolinha;
+  yBolinha = yBolinha + yVelocidadeBolinha;
+  bolinhaBateNaBorda();
+  criandoRaqueteEsquerda();
+  movimentaRaqueteEsquerda()
+  colisaoBolinhaRaqueteEsquerda();
+  criandoRaqueteOponente();
+  movimentaRaqueteOponente();
+  colisaoBolinhaRaqueteOponente();
+  verificaErro();
+  incluirPlacar();
+  marcaPonto();
+
+}
+
+function bolinhaBateNaBorda(){
+  if (xBolinha + raio > width || xBolinha - raio < 0){
+    xVelocidadeBolinha *= -1;
+  }
+  if (yBolinha + raio > height || yBolinha - raio < 0){
+    yVelocidadeBolinha *= -1;
+  }
+}
+
+function criandoRaqueteEsquerda(){
+  rect(xRaqueteEsquerda,yRaqueteEsquerda,larguraRaqueteEsquerda,alturaRaqueteEsquerda);
+}
+
+function movimentaRaqueteEsquerda(){
+  if (keyIsDown(UP_ARROW) === true)
+    yRaqueteEsquerda -= 5;
+  if (keyIsDown(DOWN_ARROW) === true)
+    yRaqueteEsquerda += 5;
+}
+
+function colisaoBolinhaRaqueteEsquerda(){
+  if (xBolinha - raio < xRaqueteEsquerda + larguraRaqueteEsquerda && yBolinha + raio > yRaqueteEsquerda && yBolinha - raio < yRaqueteEsquerda + alturaRaqueteEsquerda )
+    xVelocidadeBolinha *= -1;
+}
+
+function criandoRaqueteOponente(){
+  rect(xRaqueteOponente,yRaqueteOponente,larguraRaqueteOponente,alturaRaqueteOponente);
+}
+
+function movimentaRaqueteOponente(){
+    if (keyIsDown(87)){
+        yRaqueteOponente -= 10;
+    }
+    if (keyIsDown(83)){
+        yRaqueteOponente += 10;
+    }
+}
+
+function colisaoBolinhaRaqueteOponente(){
+  if (xBolinha + raio > xRaqueteOponente && yBolinha + raio > yRaqueteOponente && yBolinha - raio < yRaqueteOponente + alturaRaqueteOponente  ) {
+    xVelocidadeBolinha *= -1;
+  
+  }
+}
+
+function verificaErro(){
+  if (xBolinha > width){
+    xBolinha = 300;
+  }
+  if (xBolinha < 0){
+    xBolinha = 300;
+  }
+}
+
+function incluirPlacar(){
+  stroke(255);
+  textAlign(CENTER);
+  textSize(16);
+  fill(255,140,0);
+  rect(150,10,40,20);
+  rect(410,10,40,20);
+  fill(255);
+  text(meuspontos, 170,26);
+  fill(255);
+  text(pontosoponente,430,26);
+};
+
+function marcaPonto(){
+  if (xBolinha > 590){
+ meuspontos += 1;
+    
+  }
+  if (xBolinha < 10){
+    pontosoponente += 1;
+ 
+  }
+}
